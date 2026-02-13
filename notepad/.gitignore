@@ -1,0 +1,6 @@
+node_modules/
+.next/
+pb/pb_data/
+*.log
+.env.local
+.DS_Store

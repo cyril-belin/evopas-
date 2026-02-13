@@ -1,0 +1,15 @@
+{
+  "name": "yjs-server",
+  "version": "1.0.0",
+  "description": "Yjs WebSocket server for real-time collaboration",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "y-websocket": "^2.0.4",
+    "yjs": "^13.6.20",
+    "ws": "^8.18.0"
+  }
+}

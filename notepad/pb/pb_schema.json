@@ -1,0 +1,71 @@
+[
+  {
+    "name": "notes",
+    "type": "base",
+    "schema": [
+      { "name": "title", "type": "text", "required": false },
+      { "name": "content", "type": "text", "required": false },
+      { "name": "user", "type": "relation", "required": true, "options": { "collectionId": "_pb_users_auth_", "cascadeDelete": false, "maxSelect": 1 } },
+      { "name": "tags", "type": "json", "required": false },
+      { "name": "is_pinned", "type": "bool", "required": false },
+      { "name": "is_deleted", "type": "bool", "required": false },
+      { "name": "folder", "type": "relation", "required": false, "options": { "collectionId": "folders", "cascadeDelete": false, "maxSelect": 1 } },
+      { "name": "color", "type": "text", "required": false },
+      { "name": "icon", "type": "text", "required": false },
+      { "name": "word_count", "type": "number", "required": false },
+      { "name": "last_edited_at", "type": "date", "required": false },
+      { "name": "is_public", "type": "bool", "required": false },
+      { "name": "share_slug", "type": "text", "required": false },
+      { "name": "allow_edit", "type": "bool", "required": false }
+    ],
+    "listRule": "@request.auth.id = user.id || (is_public = true && is_deleted = false)",
+    "viewRule": "@request.auth.id = user.id || (is_public = true && is_deleted = false)",
+    "createRule": "@request.auth.id != ''",
+    "updateRule": "@request.auth.id = user.id",
+    "deleteRule": "@request.auth.id = user.id"
+  },
+  {
+    "name": "folders",
+    "type": "base",
+    "schema": [
+      { "name": "name", "type": "text", "required": true },
+      { "name": "user", "type": "relation", "required": true, "options": { "collectionId": "_pb_users_auth_", "cascadeDelete": false, "maxSelect": 1 } },
+      { "name": "parent_folder", "type": "relation", "required": false, "options": { "collectionId": "folders", "cascadeDelete": false, "maxSelect": 1 } },
+      { "name": "color", "type": "text", "required": false },
+      { "name": "icon", "type": "text", "required": false }
+    ],
+    "listRule": "@request.auth.id = user.id",
+    "viewRule": "@request.auth.id = user.id",
+    "createRule": "@request.auth.id != ''",
+    "updateRule": "@request.auth.id = user.id",
+    "deleteRule": "@request.auth.id = user.id"
+  },
+  {
+    "name": "note_versions",
+    "type": "base",
+    "schema": [
+      { "name": "note", "type": "relation", "required": true, "options": { "collectionId": "notes", "cascadeDelete": true, "maxSelect": 1 } },
+      { "name": "content", "type": "text", "required": false },
+      { "name": "created_by", "type": "relation", "required": true, "options": { "collectionId": "_pb_users_auth_", "cascadeDelete": false, "maxSelect": 1 } }
+    ],
+    "listRule": "@request.auth.id = created_by.id",
+    "viewRule": "@request.auth.id = created_by.id",
+    "createRule": "@request.auth.id != ''",
+    "updateRule": null,
+    "deleteRule": "@request.auth.id = created_by.id"
+  },
+  {
+    "name": "note_collaborators",
+    "type": "base",
+    "schema": [
+      { "name": "note", "type": "relation", "required": true, "options": { "collectionId": "notes", "cascadeDelete": true, "maxSelect": 1 } },
+      { "name": "user", "type": "relation", "required": true, "options": { "collectionId": "_pb_users_auth_", "cascadeDelete": false, "maxSelect": 1 } },
+      { "name": "role", "type": "text", "required": true }
+    ],
+    "listRule": "@request.auth.id = note.user.id || @request.auth.id = user.id",
+    "viewRule": "@request.auth.id = note.user.id || @request.auth.id = user.id",
+    "createRule": "@request.auth.id = note.user.id",
+    "updateRule": "@request.auth.id = note.user.id",
+    "deleteRule": "@request.auth.id = note.user.id"
+  }
+]
